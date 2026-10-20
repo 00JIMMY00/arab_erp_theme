@@ -1,33 +1,23 @@
-### Arab-erp Theme
+# Arab-erp Theme
 
-Standalone AR branding and navy-blue theme for Frappe and ERPNext
+A standalone Frappe app containing the AR logo, favicon, and navy-blue theme used by Heavy Equipment Rental. It contains no rental DocTypes, workflows, or business logic.
 
-### Installation
+## Assets
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+- `arab_erp_theme/public/branding/logo.png`: transparent AR logo for the Desk navbar, login page, and splash screen.
+- `arab_erp_theme/public/branding/favicon.ico`: matching browser icon.
+- `arab_erp_theme/public/css/theme.css`: Desk light and dark palette.
+- `arab_erp_theme/public/css/login.css`: login screen styling, scoped to the login page.
 
-```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app arab_erp_theme
+The install and migrate hooks set the logo, favicon, and “Arab ERP” app name only when those fields are empty or still use Frappe/ERPNext defaults. Existing custom site branding remains in place.
+
+## Install on a site
+
+From the Bench containing this app:
+
+```sh
+bench --site your-site.example install-app arab_erp_theme
+bench --site your-site.example clear-cache
 ```
 
-### Contributing
-
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
-
-```bash
-cd apps/arab_erp_theme
-pre-commit install
-```
-
-Pre-commit is configured to use the following tools for checking and formatting your code:
-
-- ruff
-- eslint
-- prettier
-- pyupgrade
-
-### License
-
-mit
+The app can be installed independently of Heavy Equipment Rental. Avoid installing both on one site because both provide site-wide branding and Desk styles.
