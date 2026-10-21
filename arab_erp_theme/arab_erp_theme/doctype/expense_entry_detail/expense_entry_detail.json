@@ -1,0 +1,13 @@
+{
+ "doctype": "DocType",
+ "name": "Expense Entry Detail",
+ "module": "Arab-erp Theme",
+ "istable": 1,
+ "field_order": ["expense_entry_type", "expense_entry_account", "amount"],
+ "fields": [
+  {"fieldname": "expense_entry_type", "fieldtype": "Link", "label": "Expense Entry Type", "options": "Expense Entry Type", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "expense_entry_account", "fieldtype": "Link", "label": "Expense Entry Account", "options": "Account", "fetch_from": "expense_entry_type.account", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "amount", "fieldtype": "Currency", "label": "Amount", "reqd": 1, "non_negative": 1, "in_list_view": 1}
+ ],
+ "permissions": []
+}
