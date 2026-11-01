@@ -4,3 +4,5 @@
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
+arab_erp_theme.patches.backfill_expense_entry_cost_center
+arab_erp_theme.patches.enable_expense_entry_report_totals

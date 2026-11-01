@@ -7,6 +7,9 @@ from frappe.utils import flt
 
 class ExpenseEntry(Document):
 	def validate(self):
+		if not (self.description or "").strip():
+			frappe.throw(_("Description is required."), frappe.MandatoryError)
+		self.validate_cost_center()
 		if self.journal_entry and self.docstatus == 0:
 			frappe.throw(_("The Journal Entry link is set when the Expense Entry is submitted."))
 		self.get_accounting_details()
@@ -16,12 +19,12 @@ class ExpenseEntry(Document):
 			frappe.throw(_("This Expense Entry already has a Journal Entry."))
 
 		payment_account = self.get_accounting_details()
-		cost_center = erpnext.get_default_cost_center(self.company)
+		self.validate_cost_center()
 		accounts = [
 			{
 				"account": row.expense_entry_account,
 				"debit_in_account_currency": row.amount,
-				"cost_center": cost_center,
+				"cost_center": self.cost_center,
 			}
 			for row in self.expenses
 		]
@@ -42,6 +45,15 @@ class ExpenseEntry(Document):
 		journal.insert()
 		journal.submit()
 		self.db_set("journal_entry", journal.name, update_modified=False)
+
+	def validate_cost_center(self):
+		if not self.cost_center:
+			self.cost_center = erpnext.get_default_cost_center(self.company)
+		cost_center = frappe.db.get_value(
+			"Cost Center", self.cost_center, ["company", "is_group", "disabled"], as_dict=True
+		) if self.cost_center else None
+		if not cost_center or cost_center.company != self.company or cost_center.is_group or cost_center.disabled:
+			frappe.throw(_("Select an enabled, non-group Cost Center for this Company."))
 
 	def on_cancel(self):
 		if not self.journal_entry:
